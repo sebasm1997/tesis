@@ -1,5 +1,5 @@
-import { View,  } from 'react-native'
-import React, {useState} from 'react'
+import { View,Text  } from 'react-native'
+import React, {useEffect, useState} from 'react'
 import {initialValues,validationSchema} from "./LoginFrom.data"
 import {Input,Icon,Button} from "react-native-elements"
 import Toast from 'react-native-toast-message'
@@ -7,16 +7,38 @@ import {useNavigation} from "@react-navigation/native"
 import {screen} from "../../../utils"
 import {useFormik} from "formik"
 import {styles} from "./LoginForm.syles"
-import { getAuth,signInWithEmailAndPassword } from 'firebase/auth'
+import { gql, useMutation } from '@apollo/client';
 
 
 
 
 export function LoginForm() {
 
+  const loginMutation_todo = gql`
+  mutation LoginMutation($username: String!,$password: String!){
+  login(loginUserInput:
+    {
+      username: $username,
+      password: $password,
+    }
+  ){
+    access_token,
+    email
+  }
+}
+`;
   
   const [showPassword, setshowPassword]= useState(false);
+  const [loginMutation, { data, loading, error }] = useMutation(loginMutation_todo);
   const navigation=useNavigation()
+
+
+  useEffect(()=>{
+    if (data){
+      navigation.navigate(screen.accouns.accouns);
+    }
+
+  },[data])
 
   const onshowHidenPassword= () =>setshowPassword((prevState)=>!prevState);
   const formik = useFormik({
@@ -25,14 +47,17 @@ export function LoginForm() {
     validationSchema:validationSchema(),
     validateOnChange:  false,
     onSubmit: async (formValue) => {
+
       try {
-        const auth = getAuth();
-        await signInWithEmailAndPassword(
-          auth,
-          formValue.email,
-          formValue.password
-        );
-        navigation.navigate(screen.accouns.accouns);
+        // formValue.email,
+          // formValue.password
+        
+          
+          
+          loginMutation({ variables: { username:  formValue.email, password: formValue.password } });
+
+
+        //navigation.navigate(screen.accouns.accouns);
       } catch (error) {
         Toast.show({
 
@@ -47,6 +72,7 @@ export function LoginForm() {
 
   return (
     <View style={styles.content}>
+    
       <Input
         placeholder="Correo electrónico"
         containerStyle={styles.input}
@@ -78,8 +104,12 @@ export function LoginForm() {
         containerStyle={styles.btnContainer}
         buttonStyle={styles.btn}
         onPress={formik.handleSubmit}
-         loading={formik.isSubmitting}
+         loading={formik.isSubmitting || loading}
       />
+      {
+        error && <Text> {error.message}</Text>
+      }
+
     </View>
   );
 }
