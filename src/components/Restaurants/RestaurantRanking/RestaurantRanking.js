@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { screen } from "../../../utils";
 import { styles } from "./RestaurantRanking.styles";
 
-export function RestaurantRanking(props) {
+export function ProuctosRanking(props) {
   const { restaurant, index } = props;
   const navigation = useNavigation();
 

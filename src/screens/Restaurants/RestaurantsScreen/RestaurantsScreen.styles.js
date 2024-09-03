@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
     },
     image: {
         width: '100%', // Ancho completo del contenedor de la celda
-        height: 120, // Ajusta la altura de la imagen
+        height: 110, // Ajusta la altura de la imagen
         borderRadius: 8, // Esquinas redondeadas para la imagen
         marginBottom: 10, // Espacio entre la imagen y el texto
     },

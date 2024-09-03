@@ -1,15 +1,15 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SearchScreen } from "../screens/SearchScreen";
+import { DetalleScreen } from "../screens/SearchScreen";
 import { screen } from "../utils";
 
 const Stack = createNativeStackNavigator();
 
-export function SearchStarck() {
+export function DetalleStarck() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={screen.search.search}
-        component={SearchScreen}
+        name={screen.Detalle.search}
+        component={DetalleScreen}
         options={{ title: "Detalles de las ordenes " }}
       />
     </Stack.Navigator>

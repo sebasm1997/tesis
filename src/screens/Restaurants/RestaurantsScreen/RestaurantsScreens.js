@@ -1,87 +1,74 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Image } from "react-native";
+import React, { useState, useEffect,  } from "react";
+import { View, Text, Image,TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getData } from "../../../utils/authStorage";
 import { styles } from "./RestaurantsScreen.styles";
 import { screen } from "../../../utils";
+import { useNavigation } from "@react-navigation/native";
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { host } from "../../../utils/constants";
 
-export function Restaurants(props) {
-    const navigation = props;
+export function ProductosScreens(props) {
+    
+
+    const GET_DOGS = gql`
+query Products {
+  products(offset: 0, limit: 1000, filter: "") {
+    data {
+      id
+      name
+      description
+      stock
+      img
+    }
+    total
+  }
+}
+  `;
+  const { loading, error, data } = useQuery(GET_DOGS);
+  const navigation = useNavigation();
+
     const [currentUser, setCurrentUser] = useState(null);
 
-    useEffect(() => {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-            setCurrentUser(user);
-        });
-    }, []);
+    // const getUserLogged = async () =>{
+    //     const auth = await getData();
+    //     console.log(auth)
+    // // setCurrentUser(user);
+    // }
 
-    const goToAddRestaurant = () => {
-        navigation.navigate(screen.restaurants.addRestaurant);
-    };
+    // useEffect(() => {
+    //     getUserLogged();
+    // }, []);
+
+
+    const goToProduct = (item) => {
+        navigation.navigate(screen.Prouctos.viewRestaurant, { id: item.id });
+      };
 
     return (
         <View style={styles.content}>
             <View style={styles.gridContainer}>
-                <View style={styles.imageTextContainer}>
-                    <Image
-                        source={require('../../../../assets/img/image.png')}
+            {
+        error && <Text> {error.message}</Text>
+      }
+      {
+        loading && <Text> loading</Text>
+      }
+      { data && data.products.data.map((item) => (
+        <TouchableOpacity style={styles.imageTextContainer} onPress={() => goToProduct(item)}>
+
+
+             <Image
+                        src={host + '/images/'+ item.img}
                         style={styles.image}
                     />
-                    <Text style={styles.imageText}>Airbag Copiloto Sail 
-                    $350.00</Text>
-                </View>
-                <View style={styles.imageTextContainer}>
-                    <Image
-                        source={require('../../../../assets/img/imagen2.png')}
-                        style={styles.image}
-                    />
-                    <Text style={styles.imageText}>Airbag Piloto Nissan Versa,Sentra {'\n'}
-                    $300.00</Text>
-                </View>
-                <View style={styles.imageTextContainer}>
-                    <Image
-                        source={require('../../../../assets/img/imagen3.png')}
-                        style={styles.image}
-                    />
-                    <Text style={styles.imageText}> Tapa Airbag Piloto Chevrolet Sail 
-                    {'\n'}$55.00</Text>
-                </View>
-                <View style={styles.imageTextContainer}>
-                    <Image
-                        source={require('../../../../assets/img/imagen4.png')}
-                        style={styles.image}
-                    />
-                    <Text style={styles.imageText}> Airbag Piloto Kia Cerato, Forte  {'\n'}
-                    $300.00</Text>
-                </View>
-                <View style={styles.imageTextContainer}>
-                    <Image
-                        source={require('../../../../assets/img/imagen5.png')}
-                        style={styles.image}
-                    />
-                    <Text style={styles.imageText}>Airbag Piloto Kia Sportage R {'\n'}
-                    $300.00</Text>
-                </View>
-                <View style={styles.imageTextContainer}>
-                    <Image
-                        source={require('../../../../assets/img/imagen6.png')}
-                        style={styles.image}
-                    />
-                    <Text style={styles.imageText}>Airbag Piloto Renault Logan {'\n'}
-                    $300.00</Text>
-                </View>
+             <Text style={styles.imageText}>{item.name}</Text>
+             <Text style={styles.imageText}>Disponible {item.stock}</Text>
+
+        </TouchableOpacity>
+        
+      ))}
             </View>
-            {currentUser && (
-                <Icon
-                    reverse
-                    type="material-community"
-                    name="plus"
-                    color="#00a680"
-                    containerStyle={styles.btnContainer}
-                    onPress={goToAddRestaurant}
-                />
-            )}
         </View>
     );
 }

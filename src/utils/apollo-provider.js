@@ -1,9 +1,10 @@
 "use client";
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { host } from './constants';
 
 const client = new ApolloClient({
-    uri: 'http://192.168.1.6:3005/graphql',
+    uri: host +'/graphql',
     cache: new InMemoryCache(),
   });
   

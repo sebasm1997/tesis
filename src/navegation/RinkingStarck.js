@@ -1,18 +1,20 @@
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { RankingScreen } from "../screens/RankingScreen";
+import { ListadoScreen } from "../screens/RankingScreen";
 import { screen } from "../utils";
 
 const Stack = createNativeStackNavigator();
 
-export function RinkingStarck() {
+export function ListadoStarck() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={screen.ranking.ranking}
-        component={RankingScreen}
+        name={screen.Listado.ranking}
+        component={ListadoScreen}
         options={{ title: "Listas de ordenes" }}
       />
+      
+      
     </Stack.Navigator>
   );
 }

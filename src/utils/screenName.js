@@ -1,11 +1,12 @@
 import { Favorites } from "../screens/FavoritesScreen"
-import { Restaurants } from "../screens/Restaurants/RestaurantsScreen/RestaurantsScreens"
+import { ProductosScreens } from "../screens/Restaurants/RestaurantsScreen/RestaurantsScreens"
 
-const restaurantStrack ={
+const ProductoStarck ={
    
    tab: "RestaurantsTab",
    restaurants:"Restarants",
    addRestaurant:"AddRestaurant",
+   viewRestaurant:"ViewRestaurant",
 
 }
 const favoritesStrack ={
@@ -34,11 +35,11 @@ const favoritesStrack ={
 
 export const screen= {
 
-    restaurants: restaurantStrack,
+    Prouctos: ProductoStarck,
     favorites : favoritesStrack ,
-    ranking: rankingStrack,
-    search: searchStrack,
-    accouns: accounsStrack,
+    Listado: rankingStrack,
+    Detalle: searchStrack,
+    Cuenta: accounsStrack,
 
 };
 

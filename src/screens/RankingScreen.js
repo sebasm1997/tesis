@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
 
-export function RankingScreen() {
+export function ListadoScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Órdenes</Text>
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RankingScreen;
+export default ListadoScreen;

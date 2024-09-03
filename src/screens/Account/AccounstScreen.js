@@ -4,7 +4,7 @@ import {UserGuestScreen} from "./UserGuestScreen"
 import {LoadingModal} from "../../components"
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-export function AccountScreen() {
+export function CuentaScreen() {
     const [hasLogged, setHasLogged] = useState(null);
 
     useEffect(() => {

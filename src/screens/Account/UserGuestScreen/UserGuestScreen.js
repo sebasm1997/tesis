@@ -9,7 +9,7 @@ export function UserGuestScreen() {
   const navigation = useNavigation();
 
   const goToLogin = () => {
-    navigation.navigate(screen.accouns.login);
+    navigation.navigate(screen.Cuenta.login);
   };
 
   return (

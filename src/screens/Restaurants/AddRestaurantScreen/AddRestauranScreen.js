@@ -4,7 +4,7 @@ import {styles} from "./AddRestaurantScreen.styles"
 
 import React from 'react'
 
-export function AddRestauranScreen() {
+export function AddProuctosScreen() {
   return (
     <View style={styles.content}>
       <Text>Add Restaurant Screen</Text>

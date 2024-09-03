@@ -35,7 +35,7 @@ export function LoginForm() {
 
   useEffect(()=>{
     if (data){
-      navigation.navigate(screen.accouns.accouns);
+      navigation.navigate(screen.Cuenta.accouns);
     }
 
   },[data])
@@ -57,7 +57,7 @@ export function LoginForm() {
           loginMutation({ variables: { username:  formValue.email, password: formValue.password } });
 
 
-        //navigation.navigate(screen.accouns.accouns);
+        //navigation.navigate(screen.Accouns.accouns);
       } catch (error) {
         Toast.show({
 

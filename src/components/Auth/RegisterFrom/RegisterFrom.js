@@ -29,8 +29,8 @@ export  function RegisterFrom() {
                 formValue.email,
                 formValue.password
               );
-              navigation.navigate(screen.accouns.accouns);
-            } catch (error) {
+              navigation.navigate(screen.Cuenta.accouns);
+            }catch (error) {
               Toast.show({
 
                 type:"error",

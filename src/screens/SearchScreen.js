@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
 import React from 'react';
 
-export function SearchScreen() {
+export function DetalleScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Detalles de la Orden</Text>
@@ -75,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchScreen;
+export default DetalleScreen;
