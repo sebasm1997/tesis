@@ -8,6 +8,8 @@ import {screen} from "../../../utils"
 import {useFormik} from "formik"
 import {styles} from "./LoginForm.syles"
 import { gql, useMutation } from '@apollo/client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { jwtDecode } from "jwt-decode";
 
 
 
@@ -30,15 +32,30 @@ export function LoginForm() {
   
   const [showPassword, setshowPassword]= useState(false);
   const [loginMutation, { data, loading, error }] = useMutation(loginMutation_todo);
-  const navigation=useNavigation()
+  const navigation=useNavigation();
 
 
-  useEffect(()=>{
-    if (data){
-      navigation.navigate(screen.Cuenta.accouns);
+  useEffect(() => {
+    if (data) {
+      console.log(data)
+      const storeUserData = async () => {
+        try {
+          const decoded = jwtDecode(data.login.access_token);
+          
+          await AsyncStorage.setItem('access_token', data.login.access_token);
+          
+          await AsyncStorage.setItem('email', data.login.email);
+          await AsyncStorage.setItem('user_id', ''+decoded.sub);
+  
+          navigation.navigate(screen.Productos.restaurants);
+        } catch (error) {
+          console.log('Error guardando los datos:', error);
+        }
+      };
+  
+      storeUserData();
     }
-
-  },[data])
+  }, [data]);
 
   const onshowHidenPassword= () =>setshowPassword((prevState)=>!prevState);
   const formik = useFormik({

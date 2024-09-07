@@ -1,25 +1,131 @@
-import { View, Text, StyleSheet } from 'react-native';
-import React from 'react';
+import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { screen } from "../utils";
+import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
+import { gql, useQuery } from '@apollo/client';
 
 export function ListadoScreen() {
+const navigation = useNavigation();
+const [user,setUser] = useState({
+  email: '',
+  userId:0
+});
+
+const orderMutation_todo = gql`
+query OrdersByUser($userId: Int!){
+  getOrdersByUserId(id: $userId) {
+    id
+    date
+    customerName
+    totalAmount
+    status
+    details {
+      id
+      productName
+      quantity
+      price
+    }
+    user {
+      id
+    }
+  } 
+}
+`;
+
+
+const { loading, error, data, refetch    } = useQuery(orderMutation_todo, {
+  variables: { userId: parseInt(user.userId) },
+  skip: !user.userId, // Skip query until userId is set
+});
+
+
+
+const getUserLogged = async () =>{
+    
+
+  const email = await AsyncStorage.getItem('email');
+  const userId = await AsyncStorage.getItem('user_id');
+
+  if(!email){
+    navigation.navigate(screen.Cuenta.login);
+  }else{
+    setUser({
+      email: email,
+      userId: userId
+    });
+
+
+  }
+}
+const goToOrer=(item)=>{
+  navigation.navigate(screen.Detalle.search, { id: item.id });
+
+}
+
+
+useFocusEffect(
+  useCallback(() => {
+    getUserLogged();
+
+    return () => {
+
+    };
+  }, [])
+);
+
+useFocusEffect(
+  useCallback(() => {
+    if (user.userId) {
+      refetch(); // Refetch the query when screen is focused
+    }
+  }, [user, refetch])
+);
+
+
+const getStatus = (status) => {
+  let result = status;
+  switch(status){
+    case "PENDING":
+      result = 'Pendiente';
+      break;
+      case "ACCEPTED":
+        result = 'Aceptado';
+        break;
+        case "REJECTED":
+          result = 'Rechazado';
+          break;
+          case "FINISHED" :
+            result = 'Completado';
+            break;
+            default: 
+            result = status;       
+  }
+  return result;
+}
+
+const getDate=(date)=> {
+  return new Date(date).toISOString().split('T')[0];
+}
+// useEffect(()=>{
+// console.log(data,loading, error)
+// },[data,loading, error])
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Órdenes</Text>
-      <View style={styles.orderContainer}>
-        <Text style={styles.orderNumber}>Orden #3</Text>
-        <Text style={styles.status}>Completado</Text>
-        <Text style={styles.date}>28-07-2024</Text>
-      </View>
-      <View style={styles.orderContainer}>
-        <Text style={styles.orderNumber}>Orden #2</Text>
-        <Text style={styles.status}>Completado</Text>
-        <Text style={styles.date}>24-07-2024</Text>
-      </View>
-      <View style={styles.orderContainer}>
-        <Text style={styles.orderNumber}>Orden #1</Text>
-        <Text style={styles.status}>Completado</Text>
-        <Text style={styles.date}>23-07-2024</Text>
-      </View>
+      { data && data.getOrdersByUserId.map((item) => (
+
+        <TouchableOpacity style={styles.orderContainer} onPress={() => goToOrer(item)}>
+        <Text style={styles.orderNumber}>Orden #{item.id}</Text>
+        <Text style={styles.status}>{getStatus(item.status)}</Text>
+        <Text style={styles.date}>{getDate(item.date)}</Text>
+
+        </TouchableOpacity>
+        
+      ))}
     </View>
   );
 }

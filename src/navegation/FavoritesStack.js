@@ -1,16 +1,17 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Favorites } from "../screens/FavoritesScreen";
+import { CarroScrenn } from "../screens/FavoritesScreen";
+import {ViewRestaurantScreen as ViewProuctosScreen} from "../screens/Restaurants/ViewRestaurantScreen/ViewRestaurantScreen";
 import { screen } from "../utils";
 
 const Stack = createNativeStackNavigator();
 
-export function FavoritesStarck() {
+export function CarroStarck() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={screen.favorites.favorites}
-        component={Favorites}
-        options={{ title: "Detalles del producto" }}
+        name={screen.Carro.carro}
+        component={CarroScrenn}
+        options={{ title: "Carro" }}
       />
     </Stack.Navigator>
   );

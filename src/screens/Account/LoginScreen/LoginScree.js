@@ -5,38 +5,43 @@ import { useIsFocused  } from "@react-navigation/native";
 import { LoginForm } from "../../../components/Auth";
 import { screen } from "../../../utils";
 import { styles } from "./LoginScree.styles";
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import {StyleSheet} from "react-native"
 
 import { getData, removeData } from "../../../utils/authStorage";
 export function LoginScree() {
 
   const [logged, setLogged] = useState(false);
-  const isFocused = useIsFocused();
+//   const isFocused = useIsFocused();
 
   const getUserLogged = async () =>{
-    const auth = await getData();
-    if(auth){
+    const user = await AsyncStorage.getItem('email');
+
+    if(user){
       setLogged(true)
-      console.log('Logged')
     }else{
       setLogged(false)
-      console.log('NO LOGGED')
     }
 }
-const logout = async () =>{
-   await removeData();
-   setLogged(false)
+ const logout = async () =>{
+  await AsyncStorage.removeItem('access_token');
+  await AsyncStorage.removeItem('email');
+  setLogged(false)
 }
 
-useEffect(() => {
- 
-  if (isFocused) {
-    console.log('INIT ')
+
+
+useFocusEffect(
+  useCallback(() => {
     getUserLogged();
-  }
-  
-    
-},[isFocused]);
+
+    return () => {
+
+    };
+  }, [])
+);
 
 
   return (

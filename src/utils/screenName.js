@@ -1,17 +1,17 @@
-import { Favorites } from "../screens/FavoritesScreen"
+import { CarroScrenn } from "../screens/FavoritesScreen"
 import { ProductosScreens } from "../screens/Restaurants/RestaurantsScreen/RestaurantsScreens"
 
 const ProductoStarck ={
    
    tab: "RestaurantsTab",
-   restaurants:"Restarants",
+   restaurants:"Restaurants",
    addRestaurant:"AddRestaurant",
    viewRestaurant:"ViewRestaurant",
 
 }
 const favoritesStrack ={
     tab: "FavoritesTab",
-    favorites:"Favotites",
+    carro:"Favotites",
     
  }
  const rankingStrack ={
@@ -35,8 +35,8 @@ const favoritesStrack ={
 
 export const screen= {
 
-    Prouctos: ProductoStarck,
-    favorites : favoritesStrack ,
+    Productos: ProductoStarck,
+    Carro : favoritesStrack ,
     Listado: rankingStrack,
     Detalle: searchStrack,
     Cuenta: accounsStrack,

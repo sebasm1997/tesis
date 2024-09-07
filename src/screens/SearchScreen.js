@@ -1,25 +1,106 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import React from 'react';
 
-export function DetalleScreen() {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { screen } from "../utils";
+import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
+import { gql, useMutation, useQuery } from '@apollo/client';
+
+export function DetalleScreen(props) {
+  const { route } = props;
+  const idOrder = route.params.id;
+  console.log(idOrder)
+
+  const GET_ORDER = gql`
+  query Order($id: ID!) {
+    order(id: $id) {
+      id
+      date
+      customerName
+      totalAmount
+      status
+      details {
+        id
+        productName
+        quantity
+        price
+      }
+    }
+  }
+`;
+
+  const navigation = useNavigation();
+  const { loading, error, data } = useQuery(GET_ORDER, {
+    variables: { id: idOrder },
+  });
+
+
+  const getUserLogged = async () =>{
+      
+  
+    const user = await AsyncStorage.getItem('email');
+  
+    if(!user){
+      navigation.navigate(screen.Cuenta.login);
+    }
+  }
+  const getStatus = (status) => {
+    let result = status;
+    switch(status){
+      case "PENDING":
+        result = 'Pendiente';
+        break;
+        case "ACCEPTED":
+          result = 'Aceptado';
+          break;
+          case "REJECTED":
+            result = 'Rechazado';
+            break;
+            case "FINISHED" :
+              result = 'Completado';
+              break;
+              default: 
+              result = status;       
+    }
+    return result;
+  }
+  
+  const getDate=(date)=> {
+    return new Date(date).toISOString().split('T')[0];
+  }
+  
+  useFocusEffect(
+    useCallback(() => {
+      getUserLogged();
+  
+      return () => {
+  
+      };
+    }, [])
+  );
+
   return (
+    <ScrollView>
     <View style={styles.container}>
-      <Text style={styles.header}>Detalles de la Orden</Text>
-      <View style={styles.orderContainer}>
-        <Text style={styles.orderNumber}>Orden #1</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Fecha:</Text> 23-07-2024</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Estado:</Text> Completado</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Cantidad:</Text> 5</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Producto:</Text> Airbag Piloto Renault Logan</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Precio:</Text> 300$</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Precio Total:</Text> 1.500$</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Imagen:</Text></Text>
-        <Image
-          source={{ uri: 'https://tiendaairbag.com/wp-content/uploads/2020/09/WhatsApp-Image-2020-09-22-at-15.25.37.jpeg' }}
-          style={styles.image}
-        />
+           {error && <Text>{error.message}</Text>}
+           {loading && <Text>Loading...</Text>}
+      {data && <Text style={styles.header}>Detalles de la Orden #{data.order?.id}</Text>}
+      {data && <Text style={styles.detail}><Text style={styles.label}>Fecha:</Text> {getDate(data.order?.date)}</Text>}
+        {data && <Text style={styles.detail}><Text style={styles.label}>Estado:</Text> {getStatus(data.order?.status)}</Text>}
+        {data && <Text style={styles.detail}><Text style={styles.label}>Precio Total:</Text> {(data.order?.totalAmount).toFixed(2)}$</Text>}
+        { data && data.order.details.map((item) => (
+          <View style={styles.orderContainer}>
+      <Text style={styles.detail}><Text style={styles.label}>Producto:</Text> {item.productName}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Cantidad:</Text> {item.quantity}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Precio:</Text> {item.price}$</Text>
+
       </View>
+        ))}
+      
     </View>
+    </ScrollView>
   );
 }
 

@@ -2,51 +2,91 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { host } from '../../../utils/constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function ViewRestaurantScreen(props) {
   const { route } = props;
   const idProduct = route.params.id;
 
-  const GET_DOGS = gql`
-    query Product {
-      product(id: "${idProduct}") {
+  const GET_PRODUCT = gql`
+    query Product($id: ID!) {
+      product(id: $id) {
         id
         name
         description
-        stock,
+        stock
         img
+        price
       }
     }
   `;
 
-  const [quantity, setQuantity] = useState('1');
-  const { loading, error, data } = useQuery(GET_DOGS);
+  const [quantity, setQuantity] = useState(1);
+  const { loading, error, data } = useQuery(GET_PRODUCT, {
+    variables: { id: idProduct },
+  });
 
   const incrementQuantity = () => {
-    setQuantity((prevQuantity) => (parseInt(prevQuantity) + 1).toString());
+    setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
   const decrementQuantity = () => {
-    setQuantity((prevQuantity) => {
-      const newQuantity = Math.max(1, parseInt(prevQuantity) - 1);
-      return newQuantity.toString();
-    });
+    setQuantity((prevQuantity) => Math.max(1, prevQuantity - 1));
+  };
+
+  const handleOrder = async () => {
+    if (data && data.product) {
+      try {
+        const productToSave = {
+          id: idProduct,
+          name:data.product.name,
+          price: data.product.price,
+          quantity: quantity,
+        };
+        
+        let cart = await AsyncStorage.getItem('cart');
+        if (!cart) {
+          cart=[]
+        } else {
+         
+          cart = JSON.parse(cart);
+        }
+
+        const existingProductIndex = cart.findIndex(item => item.id === idProduct);
+
+        if (existingProductIndex !== -1) {
+          cart[existingProductIndex].quantity = quantity; // Update quantity if product already in cart
+        } else {
+          cart.push(productToSave); // Add new product to cart
+        }
+       
+        await AsyncStorage.setItem('cart', JSON.stringify(cart));
+
+        console.log(cart);
+        alert(`Producto guardado: ${data.product.name}`);
+      } catch (e) {
+        console.error('Error al guardar el producto en AsyncStorage', e);
+      }
+    } else {
+      alert('No se pudieron obtener los detalles del producto.');
+    }
   };
 
   return (
     <View style={styles.container}>
       {error && <Text>{error.message}</Text>}
-      {loading && <Text>loading</Text>}
+      {loading && <Text>Loading...</Text>}
       {data && (
         <>
           <View style={styles.content}>
             <Image
-              src={host + '/images/' + data.product.img}
+              source={{ uri: `${host}/images/${data.product.img}` }}
               style={styles.image}
             />
             <View style={styles.textContainer}>
               <Text style={styles.title}>{data.product.name}</Text>
               <Text style={styles.price}>Disponible {data.product.stock}</Text>
+              <Text style={styles.price}>Precio {data.product.price}</Text>
               <Text style={styles.description}>{data.product.description}</Text>
             </View>
           </View>
@@ -58,8 +98,13 @@ export function ViewRestaurantScreen(props) {
               <TextInput
                 style={styles.quantityInput}
                 keyboardType="numeric"
-                value={quantity}
-                onChangeText={(text) => setQuantity(text)}
+                value={quantity.toString()}
+                onChangeText={(text) => {
+                  const parsed = parseInt(text);
+                  if (!isNaN(parsed)) {
+                    setQuantity(parsed);
+                  }
+                }}
               />
               <TouchableOpacity onPress={incrementQuantity} style={styles.adjustButton}>
                 <Text style={styles.adjustButtonText}>+</Text>
@@ -67,18 +112,16 @@ export function ViewRestaurantScreen(props) {
             </View>
             <TouchableOpacity
               style={styles.orderButton}
-              onPress={() => alert(`Ordenar ${quantity} productos`)}
+              onPress={handleOrder}
             >
               <Text style={styles.orderButtonText}>Ordenar</Text>
             </TouchableOpacity>
-          
           </View>
         </>
       )}
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,5 +1,5 @@
-import React, { useState, useEffect,  } from "react";
-import { View, Text, Image,TouchableOpacity } from "react-native";
+import React, { useState  } from "react";
+import { View, Text, Image,TouchableOpacity,ScrollView } from "react-native";
 import { Icon } from "react-native-elements";
 import { getData } from "../../../utils/authStorage";
 import { styles } from "./RestaurantsScreen.styles";
@@ -8,7 +8,11 @@ import { useNavigation } from "@react-navigation/native";
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { host } from "../../../utils/constants";
 
-export function ProductosScreens(props) {
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export function ProductosScreens() {
     
 
     const GET_DOGS = gql`
@@ -25,27 +29,40 @@ query Products {
   }
 }
   `;
-  const { loading, error, data } = useQuery(GET_DOGS);
+  const { loading, error, data,refetch } = useQuery(GET_DOGS);
   const navigation = useNavigation();
-
-    const [currentUser, setCurrentUser] = useState(null);
-
-    // const getUserLogged = async () =>{
-    //     const auth = await getData();
-    //     console.log(auth)
-    // // setCurrentUser(user);
-    // }
-
-    // useEffect(() => {
-    //     getUserLogged();
-    // }, []);
 
 
     const goToProduct = (item) => {
-        navigation.navigate(screen.Prouctos.viewRestaurant, { id: item.id });
+      console.log(item)
+        navigation.navigate(screen.Productos.viewRestaurant, { id: item.id });
       };
 
+
+
+      const getUserLogged = async () =>{
+        const user = await AsyncStorage.getItem('email');
+    
+        if(!user){
+          navigation.navigate(screen.Cuenta.login);
+        }
+    }
+
+      useFocusEffect(
+        useCallback(() => {
+          getUserLogged();
+          refetch();
+      
+          return () => {
+      
+          };
+        }, [refetch])
+      );
+
+
+
     return (
+      <ScrollView>
         <View style={styles.content}>
             <View style={styles.gridContainer}>
             {
@@ -70,5 +87,6 @@ query Products {
       ))}
             </View>
         </View>
+        </ScrollView>
     );
 }

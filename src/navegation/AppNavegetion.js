@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "react-native-elements";
 import { ProductoStarck } from "./RestaurantStack";
-import { FavoritesStarck } from "./FavoritesStack";
+import { CarroStarck as CarroStarck } from "./FavoritesStack";
 import { ListadoStarck as ListadoStarck } from "./RinkingStarck";
 import { DetalleStarck as DetalleStarck } from "./SearchStarck";
 import { CuentaStarck as CuentaStarck } from "./AccountsStarck";
@@ -26,24 +26,28 @@ export function AppNavegetion() {
     >
 
      <Tab.Screen 
-name={screen.Prouctos.tab} 
+name={screen.Productos.tab} 
 component={ProductoStarck} 
 options={{title:"Productos"}}
 />   
 
-
+<Tab.Screen
+ name={screen.Carro.tab}
+ component={CarroStarck}
+options={{ title: "Carro" }}
+      />
 
 <Tab.Screen 
 name={screen.Listado.tab} 
 component={ListadoStarck}
 options={{title:"Listado "}}
 /> 
-
+{/* 
 <Tab.Screen 
 name={screen.Detalle.tab} 
 component={DetalleStarck}
 options={{title:"Detalle de Orden"}}
-/> 
+/>  */}
 
 
 
@@ -60,16 +64,16 @@ options={{title:"Cuenta"}}
 function screenOptions(route, color, size) {
   let iconName;
 
-  if (route.name === screen.Prouctos.tab) {
+  if (route.name === screen.Productos.tab) {
     iconName = "compass-outline";
-  } else if (route.name === screen.favorites.tab) {
-    iconName = "heart-outline";
+  } else if (route.name === screen.Carro.tab) {
+    iconName = "cart";
   } else if (route.name === screen.Listado.tab) {
-    iconName = "star-outline";
+    iconName = "list alternate";
   } else if (route.name === screen.Detalle.tab) {
     iconName = "magnify";
   } else if (route.name === screen.Cuenta.tab) {
-    iconName = "home-outline";
+    iconName = "account";
   }
   
 
