@@ -46,21 +46,23 @@ useFocusEffect(
 
   return (
     <ScrollView style={styles.scrollView}>
-      <Image
-        source={require("../../../../assets/img/tienda-removebg-preview.png")}
-        style={styles.image}
-      />
-      <View style={styles.content}>
+    <Image
+      source={require("../../../../assets/img/tienda-removebg-preview.png")}
+      style={styles.image}
+    />
+    <View style={styles.content}>
+      <View style={styles.flexContainer}>
         {logged ?    
         <Button
         title="Cerrar sesión"
         containerStyle={styles.btnContainer}
-        buttonStyle={styles.btn}
-        onPress={()=> logout()}
+        buttonStyle={styles.logoutBtn}
+        onPress={() => logout()}
       />
-       : <LoginForm />}
+        : <LoginForm />}
       </View>
-    </ScrollView>
+    </View>
+  </ScrollView>
   );
 }
 

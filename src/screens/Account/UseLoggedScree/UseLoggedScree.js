@@ -26,7 +26,7 @@ export function UserLoggedScreen() {
      <AccountOptions onReload={onReload} />
 
       <Button
-      title={"Cerrar Sesion"}
+      title={"Cerrar  Sesion"}
       buttonStyle={styles.btnStyles}
       titleStyle= {styles.btnTextStyle}
       onPress={logout}
