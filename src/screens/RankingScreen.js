@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet,TouchableOpacity,ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -113,41 +113,54 @@ const getDate=(date)=> {
 // useEffect(()=>{
 // console.log(data,loading, error)
 // },[data,loading, error])
-  return (
+return (
+  <ScrollView contentContainerStyle={styles.container}>
     <View style={styles.container}>
       <Text style={styles.header}>Órdenes</Text>
-      { data && data.getOrdersByUserId.map((item) => (
-
-        <TouchableOpacity style={styles.orderContainer} onPress={() => goToOrer(item)}>
-        <Text style={styles.orderNumber}>Orden #{item.id}</Text>
-        <Text style={styles.status}>{getStatus(item.status)}</Text>
-        <Text style={styles.date}>{getDate(item.date)}</Text>
-
+      {data && data.getOrdersByUserId.map((item) => (
+        <TouchableOpacity
+          style={styles.orderContainer}
+          onPress={() => goToOrer(item)}
+          key={item.id} // Añadido para evitar errores de clave en listas
+        >
+          <Text style={styles.orderNumber}>Orden #{item.id}</Text>
+          <Text style={styles.status}>{getStatus(item.status)}</Text>
+          <Text style={styles.date}>{getDate(item.date)}</Text>
         </TouchableOpacity>
-        
       ))}
     </View>
-  );
+  </ScrollView>
+);
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    
+      backgroundColor: '#f5e8d9',
+      flexGrow: 1,
+    
+    
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+   
     padding: 20,
   },
   header: {
+    
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 20,
     color: '#333',
     textTransform: 'uppercase',
+    
+    
+
   },
   orderContainer: {
+    
     borderWidth: 1,
     borderRadius: 10,
+    backgroundColor: "tomato", 
     padding: 15,
     marginVertical: 10,
     width: 300,
@@ -160,11 +173,14 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   orderNumber: {
+    
     fontWeight: 'bold',
     fontSize: 18,
     marginBottom: 5,
+    
   },
   status: {
+    
     fontSize: 16,
     color: '#555',
     marginBottom: 10,

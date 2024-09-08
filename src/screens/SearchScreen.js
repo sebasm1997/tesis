@@ -82,7 +82,7 @@ export function DetalleScreen(props) {
   );
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={styles.container}>
     <View style={styles.container}>
            {error && <Text>{error.message}</Text>}
            {loading && <Text>Loading...</Text>}
@@ -105,11 +105,12 @@ export function DetalleScreen(props) {
 }
 
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5e8d9',
     padding: 20,
   },
   header: {

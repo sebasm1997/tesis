@@ -19,8 +19,8 @@ export function AppNavegetion() {
       initialRouteName={screen.Cuenta.tab}
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: "#00a680",
-        tabBarInactiveTintColor: "#646464",
+        tabBarActiveTintColor: "tomato",
+        tabBarInactiveTintColor: "#424141",
         tabBarIcon: ({ color, size }) => screenOptions(route, color, size),
       })}
     >
@@ -69,20 +69,21 @@ function screenOptions(route, color, size) {
   } else if (route.name === screen.Carro.tab) {
     iconName = "cart";
   } else if (route.name === screen.Listado.tab) {
-    iconName = "list alternate";
+    iconName = "account-details-outline";
   } else if (route.name === screen.Detalle.tab) {
-    iconName = "magnify";
+    iconName = "account-box";
   } else if (route.name === screen.Cuenta.tab) {
     iconName = "account";
   }
   
 
   return (
+    
     <Icon
-      type="material-community"
-      name={iconName}
-      color={color}
-      size={size}
-    />
+    type="material-community"
+    name={iconName}  // Nombre cambiado a "tomato"
+    color={color} // Color tomate aplicado
+    size={size}
+  />
   );
 }

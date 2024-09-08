@@ -89,44 +89,40 @@ export function LoginForm() {
 
   return (
     <View style={styles.content}>
-    
-      <Input
-        placeholder="Correo electrónico"
-        containerStyle={styles.input}
-        rightIcon={
-          <Icon type="material-community"
-           name="at" 
-           iconStyle={styles.icon} />
-        }
-        onChangeText={(text) => formik.setFieldValue("email",text)}
-        errorMessage={formik.errors.email}
+  <Input
+    placeholder="Correo electrónico"
+    containerStyle={styles.input}
+    inputStyle={styles.inputText}
+    rightIcon={
+      <Icon type="material-community" name="at" iconStyle={styles.icon} />
+    }
+    onChangeText={(text) => formik.setFieldValue("email", text)}
+    errorMessage={formik.errors.email}
+  />
+  <Input
+    placeholder="Contraseña"
+    containerStyle={styles.input}
+    inputStyle={styles.inputText}
+    secureTextEntry={showPassword ? false : true}
+    rightIcon={
+      <Icon
+        type="material-community"
+        name={showPassword ? "eye-off-outline" : "eye-outline"}
+        iconStyle={styles.icon}
+        onPress={onshowHidenPassword}
       />
-      <Input
-         placeholder="Contraseña"
-         containerStyle={styles.input}
-         secureTextEntry={showPassword ? false: true}
-         rightIcon={
-           <Icon
-             type="material-community"
-             name={showPassword ? "eye-off-outline": "eye-outline"}
-             iconStyle={styles.icon}
-             onPress={onshowHidenPassword}
-          />
-        }
-        onChangeText={(text) => formik.setFieldValue("password",text)}
-            errorMessage={formik.errors.password}
-      />
-      <Button
-        title="Iniciar sesión"
-        containerStyle={styles.btnContainer}
-        buttonStyle={styles.btn}
-        onPress={formik.handleSubmit}
-         loading={formik.isSubmitting || loading}
-      />
-      {
-        error && <Text> {error.message}</Text>
-      }
-
-    </View>
+    }
+    onChangeText={(text) => formik.setFieldValue("password", text)}
+    errorMessage={formik.errors.password}
+  />
+  <Button
+    title="Iniciar sesión"
+    containerStyle={styles.btnContainer}
+    buttonStyle={styles.btn}
+    onPress={formik.handleSubmit}
+    loading={formik.isSubmitting || loading}
+  />
+  {error && <Text style={styles.errorText}>{error.message}</Text>}
+</View>
   );
 }
