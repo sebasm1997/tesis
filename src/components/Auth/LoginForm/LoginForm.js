@@ -47,7 +47,7 @@ export function LoginForm() {
           await AsyncStorage.setItem('email', data.login.email);
           await AsyncStorage.setItem('user_id', ''+decoded.sub);
   
-          navigation.navigate(screen.Productos.restaurants);
+          navigation.navigate(screen.Prouctos.restaurants);
         } catch (error) {
           console.log('Error guardando los datos:', error);
         }

@@ -26,7 +26,7 @@ export function AppNavegetion() {
     >
 
      <Tab.Screen 
-name={screen.Productos.tab} 
+name={screen.Prouctos.tab} 
 component={ProductoStarck} 
 options={{title:"Productos"}}
 />   
@@ -64,7 +64,7 @@ options={{title:"Cuenta"}}
 function screenOptions(route, color, size) {
   let iconName;
 
-  if (route.name === screen.Productos.tab) {
+  if (route.name === screen.Prouctos.tab) {
     iconName = "compass-outline";
   } else if (route.name === screen.Carro.tab) {
     iconName = "cart";

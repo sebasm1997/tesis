@@ -35,7 +35,7 @@ const favoritesStrack ={
 
 export const screen= {
 
-    Productos: ProductoStarck,
+    Prouctos: ProductoStarck,
     Carro : favoritesStrack ,
     Listado: rankingStrack,
     Detalle: searchStrack,

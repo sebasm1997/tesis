@@ -56,9 +56,11 @@ export function CarroScrenn() {
       userId: parseInt(user.userId),
       customerName: user.email,
       detailsOrder: cart.map(producto => ({
+        productId:producto.id,
         productName: producto.name,
         quantity: producto.quantity,
-        price: producto.price
+        price: producto.price,
+        img: producto.img
       }))
     };
 

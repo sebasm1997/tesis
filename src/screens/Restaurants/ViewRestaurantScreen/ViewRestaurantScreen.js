@@ -42,6 +42,7 @@ const handleOrder = async () => {
         name: data.product.name,
         price: data.product.price,
         quantity: quantity,
+        img: data.product.img
       };
 
       let cart = await AsyncStorage.getItem('cart');
@@ -87,8 +88,8 @@ const handleOrder = async () => {
   }
 };
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
+return (
+  <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={styles.container}>
       {error && <Text>{error.message}</Text>}
       {loading && <Text>Loading...</Text>}
@@ -101,11 +102,12 @@ const handleOrder = async () => {
             />
             <View style={styles.textContainer}>
               <Text style={styles.title}>{data.product.name}</Text>
-              <Text style={styles.price}>Disponible {data.product.stock}</Text>
-              <Text style={styles.price}>Precio {data.product.price}</Text>
+              <Text style={styles.price}>Disponible: {data.product.stock}</Text>
+              <Text style={styles.price}>Precio: {data.product.price}</Text>
               <Text style={styles.description}>{data.product.description}</Text>
             </View>
           </View>
+
           <View style={styles.bottomContainer}>
             <View style={styles.quantityContainer}>
               <TouchableOpacity onPress={decrementQuantity} style={styles.adjustButton}>
@@ -126,18 +128,16 @@ const handleOrder = async () => {
                 <Text style={styles.adjustButtonText}>+</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.orderButton}
-              onPress={handleOrder}
-            >
+            <TouchableOpacity style={styles.orderButton} onPress={handleOrder}>
               <Text style={styles.orderButtonText}>Ordenar</Text>
             </TouchableOpacity>
           </View>
         </>
       )}
     </View>
-    </ScrollView>
-  );
+  </ScrollView>
+);
+  
 }
 const styles = StyleSheet.create({
   container: {
@@ -190,8 +190,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#0f0e0e',
     lineHeight: 24,
-    textAlign: 'center',
-    fontStyle: '600', // Para dar un toque estilizado
+    textAlign: 'justify',
+    fontWeight: '600', // Cambiado fontStyle a fontWeight para grosor
   },
   bottomContainer: {
    

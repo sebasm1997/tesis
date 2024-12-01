@@ -13,19 +13,19 @@ export function ProductoStarck (){
 
     <Stack.Navigator>
 <Stack.Screen
-    name={screen.Productos.restaurants}
+    name={screen.Prouctos.restaurants}
     component={ProductosScreens}
     options={{title: "Productos"}}
 
 />
 <Stack.Screen
-    name={screen.Productos.addRestaurant}
+    name={screen.Prouctos.addRestaurant}
     component={AddProuctosScreen}
     options={{title: "Nuevo Producto"}}
 
 />
 <Stack.Screen
-    name={screen.Productos.viewRestaurant}
+    name={screen.Prouctos.viewRestaurant}
     component={ViewProuctosScreen}
     options={{title: "Producto"}}
 

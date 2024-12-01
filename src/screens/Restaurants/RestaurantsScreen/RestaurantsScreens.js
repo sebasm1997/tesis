@@ -35,7 +35,7 @@ query Products {
 
     const goToProduct = (item) => {
       console.log(item)
-        navigation.navigate(screen.Productos.viewRestaurant, { id: item.id });
+        navigation.navigate(screen.Prouctos.viewRestaurant, { id: item.id });
       };
 
 
@@ -62,7 +62,7 @@ query Products {
 
 
     return (
-      <ScrollView>
+      <ScrollView  style={styles.content}>
         <View style={styles.content}>
             <View style={styles.gridContainer}>
             {
